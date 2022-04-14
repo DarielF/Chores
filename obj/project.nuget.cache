@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "za9+zbBXLusvP8FZCkc0EZ/IH++C4/ucrnlJquNNwKPy5zJJ+kCyU58DDBrCMPHDVTkRIe8lJG+AJBhdr+9EjA==",
+  "success": true,
+  "projectFilePath": "D:\\.NET learning\\TaskManager\\TaskManager.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Laptop\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.11.1\\microsoft.visualstudio.azure.containers.tools.targets.1.11.1.nupkg.sha512"
+  ],
+  "logs": []
+}
