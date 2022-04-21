@@ -21,16 +21,15 @@ namespace TaskManager.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_context.Persons);
+            return Ok(_context.Users);
         }
 
         [HttpPost("addPerson")]
-        public IActionResult Add([FromBody] AddPersonRequest request)
+        public IActionResult Add([FromBody] AddUserRequest request)
         {
-
-            var newPerson = new Person
+            var newPerson = new User
             {
-                PersonID = request.ID,
+                UserID = request.ID,
                 Name = request.Name,
                 LastName = request.LastName,
                 ExtraInfo = request.ExtraInfo

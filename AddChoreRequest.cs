@@ -10,9 +10,10 @@ namespace TaskManager
         public int ChoreID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool TaskDone { get; set; }
         public DateTime CreatedTime { get; set; }
         public string Deadline { get; set; }
-        public int PersonID { get; set; }
+        public int UserID { get; set; }
 
         //maybe create a function to get a person by his ID
     }

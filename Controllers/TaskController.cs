@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
-using System.Threading.Tasks;
-using TaskManager.Entities;
 using System.Globalization;
+using TaskManager.Entities;
 
 namespace TaskManager.Controllers
 {
@@ -13,9 +12,13 @@ namespace TaskManager.Controllers
     public class TaskController : ControllerBase
     {
         private readonly ApplicationContext _context; //Reference to Data Base
-        CultureInfo _dateFormat = new CultureInfo("en-US");
-        public TaskController(ApplicationContext context) {
+        private readonly IConfiguration _configuration;
+        private readonly CultureInfo _dateFormat;
+               
+        public TaskController(ApplicationContext context, IConfiguration configuration) {
             _context = context;
+            _configuration = configuration;
+            _dateFormat = new CultureInfo(_configuration.GetValue<string>("DateFormat"));
         }
         [HttpGet]
         public IActionResult GetAll()
@@ -39,12 +42,12 @@ namespace TaskManager.Controllers
         public IActionResult Get() { // return all the tasks which deadline is for today
             
             var ForToday = from tasks in _context.Chores
-                           where tasks.Deadline == DateTime.Now.Date
+                           where tasks.Deadline == DateTime.Today.Date
                            select tasks;
             return Ok(ForToday);
         }
 
-        [HttpPost("newtask")]
+        [HttpPost("addtask")]
         public IActionResult Add([FromBody] AddChoreRequest request)
         {
             var newChore = new Chore
@@ -53,8 +56,9 @@ namespace TaskManager.Controllers
                 Name = request.Name,
                 Description = request.Description,
                 CreatedTime = DateTime.Now,
+                TaskDone = request.TaskDone,
                 Deadline = DateTime.Parse(request.Deadline, _dateFormat, DateTimeStyles.AdjustToUniversal),
-                Person  = _context.Persons.Find(request.PersonID)
+                //Person  = _context.Users.Find(request.UserID)
             };
             _context.Add(newChore);
             _context.SaveChanges();

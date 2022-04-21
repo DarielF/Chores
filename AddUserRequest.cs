@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TaskManager.Entities
+namespace TaskManager
 {
-    public class Person
+    public class AddUserRequest
     {
-        public int PersonID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string ExtraInfo { get; set; }
-
-        public string GetFullName() {
-            return Name + " " + LastName;
-        }
-
-        
     }
 }
