@@ -14,7 +14,7 @@ namespace TaskManager.Controllers
         private readonly ApplicationContext _context; //Reference to Data Base
         private readonly IConfiguration _configuration;
         private readonly CultureInfo _dateFormat;
-               
+
         public TaskController(ApplicationContext context, IConfiguration configuration) {
             _context = context;
             _configuration = configuration;
@@ -35,8 +35,20 @@ namespace TaskManager.Controllers
             }
             return Ok(task);
         }
-
-        
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id) {
+            var task = _context.Chores.FirstOrDefault(x => x.ChoreID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _context.Chores.Remove(task);
+                _context.SaveChanges();
+                return Ok();
+            }
+        }
 
         [HttpGet("today")]
         public IActionResult Get() { // return all the tasks which deadline is for today
