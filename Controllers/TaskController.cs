@@ -4,6 +4,9 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Globalization;
 using TaskManager.Entities;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace TaskManager.Controllers
 {
@@ -49,6 +52,26 @@ namespace TaskManager.Controllers
                 return Ok();
             }
         }
+        //Update method
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] EditTaskRequest request)
+        {
+            var task = _context.Chores.FirstOrDefault(x => x.ChoreID == id);
+            if (task == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var updatedTask = new Chore { Name = request.Name,
+                                              Description = request.Description,
+                                              Deadline = request.Deadline
+                                              };
+                _context.Update(updatedTask);
+                _context.SaveChanges();
+            }
+            return Ok();
+        }
 
         [HttpGet("today")]
         public IActionResult Get() { // return all the tasks which deadline is for today
@@ -58,6 +81,16 @@ namespace TaskManager.Controllers
                            select tasks;
             return Ok(ForToday);
         }
+
+        //public async Task<IActionResult> Index(string searchName) {
+        //    var task = from t in _context.Chores
+        //               select t;
+        //    if(!String.IsNullOrEmpty(searchName)) {
+        //        task = task.Where(s => s.Name!.Contains(searchName));
+        //    }
+
+        //    return View(await task.ToListAsync());
+        //}
 
         [HttpPost("addtask")]
         public IActionResult Add([FromBody] AddChoreRequest request)
