@@ -11,7 +11,7 @@ namespace TaskManager
         public string Name { get; set; }
         public string Description { get; set; }
         public bool TaskDone { get; set; }
-        public DateTime Deadline { get; set; }
+        public string Deadline { get; set; }
         public User Person { get; set; }
     }
 }

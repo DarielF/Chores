@@ -15,7 +15,7 @@ namespace TaskManager.Entities
         public DateTime CreatedTime { get; set; }
         public bool TaskDone { get; set; }
         public DateTime Deadline { get; set; }
-        public User Person { get; set; }
+        public User?  Person { get; set; }
 
-    }
+     }
 }

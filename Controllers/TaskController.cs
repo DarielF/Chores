@@ -7,6 +7,7 @@ using TaskManager.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Web;
+using System.Reflection;
 
 namespace TaskManager.Controllers
 {
@@ -53,24 +54,37 @@ namespace TaskManager.Controllers
             }
         }
         //Update method
-        [HttpPut("{id}")]
+        [HttpPost("{id}")]
         public IActionResult Update(int id, [FromBody] EditTaskRequest request)
         {
             var task = _context.Chores.FirstOrDefault(x => x.ChoreID == id);
+            var updatedTask = new Chore();
             if (task == null)
             {
                 return NotFound();
             }
             else
             {
-                var updatedTask = new Chore { Name = request.Name,
-                                              Description = request.Description,
-                                              Deadline = request.Deadline
-                                              };
-                _context.Update(updatedTask);
+                task.Name = request.Name;
+                task.Description = request.Description;
+                task.Deadline = DateTime.Parse(request.Deadline, _dateFormat, DateTimeStyles.AdjustToUniversal);
+                task.TaskDone = request.TaskDone;
+                //person here
+                _context.Update(task);
                 _context.SaveChanges();
+                return Ok($"item with id: {id} updated");
             }
-            return Ok();
+            
+        }
+
+        [HttpGet("search/{nameQuery}")]
+        public IActionResult SearchTaskByName(string nameQuery) {
+            
+            var searchResult = from q in _context.Chores
+                               where q.Name.ToLower().Contains(nameQuery.ToLower())
+                               select q;
+
+            return Ok(searchResult.ToList());
         }
 
         [HttpGet("today")]
