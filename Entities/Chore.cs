@@ -17,6 +17,7 @@ namespace TaskManager.Entities
         public bool TaskDone { get; set; }
         public DateTime Deadline { get; set; }
 
+        public string Priority { get; set; }
         public List<UserChores> UserChores { get; set; }
 
 

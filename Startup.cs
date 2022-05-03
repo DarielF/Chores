@@ -28,6 +28,7 @@ namespace TaskManager
         {
             services.AddControllers();
             services.AddDbContext<ApplicationContext>(options=> options.UseNpgsql(Configuration.GetConnectionString("Database"))); //Connects DB (ApplicationContext)
+            //Authentication services here
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +44,7 @@ namespace TaskManager
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication(); // Add authentication to the app 
 
             app.UseEndpoints(endpoints =>
             {

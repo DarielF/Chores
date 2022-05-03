@@ -31,3 +31,4 @@ D:\.NET learning\TaskManager\bin\Debug\netcoreapp3.1\JWT.dll
 D:\.NET learning\TaskManager\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 D:\.NET learning\TaskManager\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.Design.dll
 D:\.NET learning\TaskManager\bin\Debug\netcoreapp3.1\Npgsql.EntityFrameworkCore.PostgreSQL.Design.dll
+D:\.NET learning\TaskManager\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Design.dll

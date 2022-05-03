@@ -32,7 +32,7 @@ namespace TaskManager.Controllers
                 UserID = request.ID,
                 Name = request.Name,
                 LastName = request.LastName,
-                ExtraInfo = request.ExtraInfo
+                //ExtraInfo = request.ExtraInfo
             };
             _context.Add(newPerson);
             _context.SaveChanges();
