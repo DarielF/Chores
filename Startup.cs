@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace TaskManager
 {
@@ -29,6 +32,24 @@ namespace TaskManager
             services.AddControllers();
             services.AddDbContext<ApplicationContext>(options=> options.UseNpgsql(Configuration.GetConnectionString("Database"))); //Connects DB (ApplicationContext)
             //Authentication services here
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(
+                    authenticationScheme: JwtBearerDefaults.AuthenticationScheme,
+                    configureOptions: options =>
+                    {
+                        options.IncludeErrorDetails = true;
+                        options.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF32.GetBytes(Configuration["Jwt:Privatekey"])),
+                            ValidateAudience = "identityapp",
+                            ValidateIssuer = "identityapp",
+                            RequireExpirationTime = true,
+                            ValidateIssuer = true,
+                            ValidateLifetime = true,
+                            ValidateAudience = true,
+                        };
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +65,7 @@ namespace TaskManager
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseAuthentication(); // Add authentication to the app 
+            app.UseAuthentication(); // Adds authentication to the app 
 
             app.UseEndpoints(endpoints =>
             {

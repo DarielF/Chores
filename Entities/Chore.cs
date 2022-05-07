@@ -16,10 +16,7 @@ namespace TaskManager.Entities
         public DateTime CreatedTime { get; set; }
         public bool TaskDone { get; set; }
         public DateTime Deadline { get; set; }
-
         public string Priority { get; set; }
         public List<UserChores> UserChores { get; set; }
-
-
     }
 }
