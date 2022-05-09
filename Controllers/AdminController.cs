@@ -1,22 +1,24 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManager.Entities;
-
+using JWTWebAuthentication.Repository;
+using TaskManager.Models;
 
 namespace TaskManager.Controllers
 {
-    [ApiController]
     [Authorize]
+    [ApiController]
     [Route("[controller]")]
     public class AdminController : ControllerBase
     {
         private readonly ApplicationContext _context;
-        public AdminController(ApplicationContext context)
+        private readonly IJWTManagerRepository _jWTManager;
+        public AdminController(ApplicationContext context, IJWTManagerRepository jWTManager)
         {
+            this._jWTManager = jWTManager;
             _context = context;
         }
 
@@ -41,8 +43,19 @@ namespace TaskManager.Controllers
             return Ok("Person added");
 
         }
-        //private int IdGenerator() { 
-        
-        //}
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("authenticate")]
+        public IActionResult Authenticate(LoginRequest usersdata)
+        {
+            var token = _jWTManager.Authenticate(usersdata);
+
+            if (token == null)
+            {
+                return Unauthorized();
+            }
+
+            return Ok(token);
+        }
     }
 }
