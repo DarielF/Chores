@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using JWTWebAuthentication.Repository;
 
 namespace TaskManager
 {
@@ -31,25 +32,28 @@ namespace TaskManager
         {
             services.AddControllers();
             services.AddDbContext<ApplicationContext>(options=> options.UseNpgsql(Configuration.GetConnectionString("Database"))); //Connects DB (ApplicationContext)
-            //Authentication services here
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(
-                    authenticationScheme: JwtBearerDefaults.AuthenticationScheme,
-                    configureOptions: options =>
-                    {
-                        options.IncludeErrorDetails = true;
-                        options.TokenValidationParameters = new TokenValidationParameters()
-                        {
-                            IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF32.GetBytes(Configuration["Jwt:Privatekey"])),
-                            ValidateAudience = "identityapp",
-                            ValidateIssuer = "identityapp",
-                            RequireExpirationTime = true,
-                            ValidateIssuer = true,
-                            ValidateLifetime = true,
-                            ValidateAudience = true,
-                        };
-                    });
+                                                                                                                                   //Authentication services here
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                var Key = Encoding.UTF8.GetBytes(Configuration["JWT:Key"]);
+                o.SaveToken = true;
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JWT:Issuer"],
+                    ValidAudience = Configuration["JWT:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Key)
+                };
+            });
+
+            services.AddSingleton<IJWTManagerRepository, JWTManagerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
