@@ -1,7 +1,6 @@
-﻿using JWTWebAuthentication;
-using TaskManager.Models;
+﻿using TaskManager.Models;
 
-namespace JWTWebAuthentication.Repository
+namespace TaskManager
 {
     public interface IJWTManagerRepository
     {

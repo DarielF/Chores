@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TaskManager.Entities;
-using JWTWebAuthentication.Repository;
+using TaskManager.Services;
 using TaskManager.Models;
 
 namespace TaskManager.Controllers
@@ -16,10 +16,12 @@ namespace TaskManager.Controllers
     {
         private readonly ApplicationContext _context;
         private readonly IJWTManagerRepository _jWTManager;
-        public AdminController(ApplicationContext context, IJWTManagerRepository jWTManager)
+        private readonly IUserServices _userServices;
+        public AdminController(ApplicationContext context, IJWTManagerRepository jWTManager, IUserServices userServices)
         {
             this._jWTManager = jWTManager;
             _context = context;
+            _userServices = userServices;
         }
 
         [HttpGet]
@@ -56,6 +58,15 @@ namespace TaskManager.Controllers
             }
 
             return Ok(token);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("register")]
+        public IActionResult Register([FromBody] RegisterRequest request) {
+            
+            var response = _userServices.Register(request);
+            return Ok(response);
         }
     }
 }

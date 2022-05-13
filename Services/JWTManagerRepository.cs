@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using TaskManager.Models;
 
-namespace JWTWebAuthentication.Repository
+namespace TaskManager
 {
     public class JWTManagerRepository: IJWTManagerRepository
     {

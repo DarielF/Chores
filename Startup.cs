@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using JWTWebAuthentication.Repository;
+using TaskManager.Services;
 
 namespace TaskManager
 {
@@ -32,7 +32,7 @@ namespace TaskManager
         {
             services.AddControllers();
             services.AddDbContext<ApplicationContext>(options=> options.UseNpgsql(Configuration.GetConnectionString("Database"))); //Connects DB (ApplicationContext)
-                                                                                                                                   //Authentication services here
+            services.AddTransient<IUserServices,UserServices>(); //Dependency injection - connects service/interface to the app                                                                                                    //Authentication services here
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
