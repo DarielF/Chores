@@ -18,12 +18,17 @@ namespace TaskManager.Services
         }
 
         public AddUserResponse Register(RegisterRequest request) {
-            var userDB = _context.Users.FirstOrDefault(x => x.Email == request.Email || x.Username == request.Username);
-            if (userDB == null) {
-                return new AddUserResponse {
-                    IsSuccessful = false, 
-                    Token = null
-                }; 
+            var userDB = _context.Users;
+            if (userDB.Any()) {
+                var userDb = userDB.FirstOrDefault(x => x.Email == request.Email || x.Username == request.Username);
+                if (userDb == null)
+                {
+                    return new AddUserResponse
+                    {
+                        IsSuccessful = false,
+                        Token = null
+                    };
+                }
             }
 
             var newUser = new User {
